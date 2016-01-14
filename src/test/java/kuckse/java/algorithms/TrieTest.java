@@ -11,6 +11,12 @@ public class TrieTest {
 
     @Test
     public void testSize() throws Exception {
-        assertThat(Trie.<Character, String>trie().put(characters("abc"), null).size(), Matchers.equalTo(3));
+        assertThat(Trie.<Character, String>trie().put(characters("abc"), null).size(), Matchers.equalTo(4));
+        assertThat(Trie.<Character, String>trie()
+                .put(characters("abc"), null)
+                .put(characters("abde"), null).size(), Matchers.equalTo(6));
+        assertThat(Trie.<Character, String>trie()
+                .put(characters("abc"), null)
+                .put(characters("fij"), null).size(), Matchers.equalTo(7));
     }
 }

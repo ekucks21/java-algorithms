@@ -6,9 +6,12 @@ import com.googlecode.totallylazy.Value;
 import com.googlecode.totallylazy.annotations.tailrec;
 import com.googlecode.totallylazy.collections.ListMap;
 import com.googlecode.totallylazy.collections.PersistentMap;
+import com.googlecode.totallylazy.numbers.Integers;
+import com.googlecode.totallylazy.numbers.Numbers;
 
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
+import static com.googlecode.totallylazy.numbers.Numbers.add;
 
 
 /**
@@ -29,8 +32,8 @@ public class Trie<K, V> implements Value<V> {
         return trie(Option.<V>none());
     }
 
-    public static int size() {
-        return 0;
+    public Number size() {
+        return children.values().map(trie -> trie.size()).fold(1, add);
     }
 
     public static <K, V> Trie<K, V> trie(Option<V> value) {

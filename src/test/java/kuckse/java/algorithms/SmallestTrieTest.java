@@ -10,10 +10,7 @@ public class SmallestTrieTest {
 
     @Test
     public void testSmallestTrie() throws Exception {
-        //when
-        final int leastNodes = SmallestTrie.leastNodes("cba", "abc", "bca", "bac");
-
-        //then
-        assertThat(leastNodes, equalTo(3));
+        assertThat(SmallestTrie.leastNodes("cba", "abc", "bca", "bac"), equalTo(4));
+        assertThat(SmallestTrie.leastNodes("bdi", "dbf", "bld", "bop"), equalTo(8));
     }
 }
