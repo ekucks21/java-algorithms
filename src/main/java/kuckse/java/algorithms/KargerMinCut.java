@@ -2,19 +2,64 @@ package kuckse.java.algorithms;
 
 import com.sun.corba.se.impl.orbutil.graph.Graph;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class KargerMinCut {
     public int calculate(Graph graph) {
         int numVertices = graph.numVertices;
         final Random random = new Random();
-        while(numVertices > 2) {
-            random.nextInt(graph.numEdges);
+        final ArrayList<Subset> subsets = new ArrayList<>(graph.numVertices);
+        for (int i = 0; i < numVertices; i++) {
+            subsets.add(i, new Subset(0, i));
         }
-        return 0;
+        while(numVertices > 2) {
+            final Edge edgeToRemove = graph.edges.get(random.nextInt(graph.numEdges));
+            if(find(subsets, edgeToRemove.dest) != find(subsets, edgeToRemove.src)) {
+                numVertices--;
+                union(subsets, edgeToRemove.dest, edgeToRemove.src);
+            }
+        }
+
+        int numCrossingEdges = 0;
+        for (int i = 0; i < graph.numEdges; i++) {
+            if (find(subsets, graph.edges.get(i).dest) != find(subsets, graph.edges.get(i).src)) {
+                numCrossingEdges++;
+            }
+        }
+        return numCrossingEdges;
+    }
+
+    private void union(ArrayList<Subset> subsets, int x, int y) {
+        int xroot = find(subsets, x);
+        int yroot = find(subsets, y);
+
+        if(subsets.get(xroot).rank > subsets.get(yroot).rank) {
+            subsets.get(yroot).parent = xroot;
+        } else if(subsets.get(yroot).rank > subsets.get(xroot).rank){
+            subsets.get(xroot).parent = yroot;
+        } else {
+            subsets.get(xroot).rank++;
+            subsets.get(yroot).parent = xroot;
+        }
+    }
+
+    private int find(ArrayList<Subset> subsets, int x) {
+        int parent = subsets.get(x).parent;
+        if(parent != x) {
+            parent = find(subsets, parent);
+            subsets.get(x).parent = parent;
+        }
+        return parent;
+    }
+
+    public static class Subset {
+        public int rank;
+        public int parent;
+
+        public Subset(int rank, int parent) {
+            this.rank = rank;
+            this.parent = parent;
+        }
     }
 
     public static class Edge {

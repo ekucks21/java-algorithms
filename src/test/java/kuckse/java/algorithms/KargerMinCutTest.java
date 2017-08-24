@@ -1,18 +1,14 @@
 package kuckse.java.algorithms;
 
-import com.google.common.collect.Sets;
-import com.googlecode.totallylazy.Lists;
+import com.googlecode.totallylazy.numbers.Integers;
 import kuckse.java.algorithms.KargerMinCut.Edge;
 import kuckse.java.algorithms.KargerMinCut.Graph;
 import org.apache.commons.io.FileUtils;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +24,7 @@ public class KargerMinCutTest {
     @Test
     public void testSmall1() throws Exception {
         //given
-        Graph graph = getGraph();
+        Graph graph = getGraph("smallKargerMinCut.txt");
 
         //when
         int minCut = minCutCalculator.calculate(graph);
@@ -37,11 +33,13 @@ public class KargerMinCutTest {
        assertThat(minCut, equalTo(2));
     }
 
-    private Graph getGraph() throws IOException {
-        final List<String> adjacentVerticesString = FileUtils.readLines(new ClassPathResource("kargerMinCut.txt").getFile(), Charset.defaultCharset());
+    private Graph getGraph(String graphFile) throws IOException {
+        final List<String> adjacentVerticesString = FileUtils.readLines(new ClassPathResource(graphFile).getFile(), Charset.defaultCharset());
         final Set<HashSet<Integer>> rawEdges = sequence(adjacentVerticesString)
                 .map(s -> s.split("\\s+"))
-                .map(ss -> sequence(ss).map(Integer::parseInt))
+                .map(ss -> sequence(ss)
+                        .map(Integer::parseInt)
+                        .map(i -> i--))
                 .flatMap(is -> is.drop(1).map(adjacent -> newHashSet(adjacent, is.first())))
                 .toSet();
         final List<Edge> edges = sequence(rawEdges)
