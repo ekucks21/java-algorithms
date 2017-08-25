@@ -22,9 +22,9 @@ public class KargerMinCutTest {
     private KargerMinCut minCutCalculator = new KargerMinCut();
 
     @Test
-    public void testSmall1() throws Exception {
+    public void testSmall2() throws Exception {
         //given
-        Graph graph = getGraph("smallKargerMinCut.txt");
+        Graph graph = getGraph("smallKargerMinCut2.txt");
 
         //when
         int minCut = minCutCalculator.calculate(graph);
@@ -39,7 +39,7 @@ public class KargerMinCutTest {
                 .map(s -> s.split("\\s+"))
                 .map(ss -> sequence(ss)
                         .map(Integer::parseInt)
-                        .map(i -> i--))
+                        .map(i -> i - 1))
                 .flatMap(is -> is.drop(1).map(adjacent -> newHashSet(adjacent, is.first())))
                 .toSet();
         final List<Edge> edges = sequence(rawEdges)
