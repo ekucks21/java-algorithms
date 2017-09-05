@@ -33,6 +33,42 @@ public class KargerMinCutTest {
        assertThat(minCut, equalTo(2));
     }
 
+    @Test
+    public void testSmall3() throws Exception {
+        //given
+        Graph graph = getGraph("smallKargerMinCut3.txt");
+
+        //when
+        int minCut = minCutCalculator.calculate(graph);
+
+        //then
+        assertThat(minCut, equalTo(3));
+    }
+
+    @Test
+    public void testSmall4() throws Exception {
+        //given
+        Graph graph = getGraph("smallKargerMinCut4.txt");
+
+        //when
+        int minCut = minCutCalculator.calculate(graph);
+
+        //then
+        assertThat(minCut, equalTo(1));
+    }
+
+    @Test
+    public void testLarge() throws Exception {
+        //given
+        Graph graph = getGraph("kargerMinCut.txt");
+
+        //when
+        int minCut = minCutCalculator.calculate(graph);
+
+        //then
+        assertThat(minCut, equalTo(17));
+    }
+
     private Graph getGraph(String graphFile) throws IOException {
         final List<String> adjacentVerticesString = FileUtils.readLines(new ClassPathResource(graphFile).getFile(), Charset.defaultCharset());
         final Set<HashSet<Integer>> rawEdges = sequence(adjacentVerticesString)

@@ -5,11 +5,14 @@ import java.util.*;
 public class KargerMinCut {
     public int calculate(Graph graph) {
         double numTries = Math.pow(graph.numVertices, 2) * (Math.log(graph.numVertices) / Math.log(2));
-        int minCut = 0;
+        int minCut = graph.numEdges;
         for (int i = 0; i < numTries; i++) {
-            
+            final int randomCut = randomCut(graph);
+            if(randomCut < minCut) {
+                minCut = randomCut;
+            }
         }
-        return randomCut(graph);
+        return minCut;
     }
 
     private int randomCut(Graph graph) {
